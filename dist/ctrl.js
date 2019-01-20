@@ -52,43 +52,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var panelDefaults = {
   fontSizes: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70],
   fontTypes: ['Arial', 'Avant Garde', 'Bookman', 'Consolas', 'Courier', 'Courier New', 'Garamond', 'Helvetica', 'Open Sans', 'Palatino', 'Times', 'Times New Roman', 'Verdana'],
-  unitFormats: _kbn2.default.getUnitFormats(),
-  operatorNameOptions: ['min', 'max', 'avg', 'current', 'total', 'name'],
-  valueMaps: [{ value: 'null', op: '=', text: 'N/A' }],
-  mappingTypes: [{ name: 'value to text', value: 1 }, { name: 'range to text', value: 2 }],
-  rangeMaps: [{ from: 'null', to: 'null', text: 'N/A' }],
-  tickMaps: [],
-  mappingType: 1,
-  thresholds: '',
   colors: ["rgba(245, 54, 54, 0.9)", "rgba(237, 129, 40, 0.89)", "rgba(50, 172, 45, 0.97)"],
-  decimals: 2, // decimal precision
-  format: 'none', // unit format
-  operatorName: 'avg', // operator applied to time series
   bullet: {
-    minValue: 0,
-    maxValue: 100,
-    tickSpaceMinVal: 1,
-    tickSpaceMajVal: 10,
-    bulletUnits: '', // no units by default, this will be selected by user
-    bulletRadius: 0, // 0 for auto-scale
-    pivotRadius: 0.1,
-    padding: 0.05,
-    edgeWidth: 0.05,
-    tickEdgeGap: 0.05,
-    tickLengthMaj: 0.15,
-    tickLengthMin: 0.05,
-    needleTickGap: 0.05,
-    needleLengthNeg: 0.2,
-    ticknessBulletBasis: 200,
-    needleWidth: 5,
-    tickWidthMaj: 5,
-    tickWidthMin: 1,
     titleFontSize: 22,
     subtitleFontSize: 18,
-    zeroTickAngle: 60,
-    maxTickAngle: 300,
-    zeroNeedleAngle: 40,
-    maxNeedleAngle: 320,
     outerEdgeCol: '#0099CC',
     innerCol: '#fff',
     pivotCol: '#999',
@@ -107,15 +74,7 @@ var panelDefaults = {
     markerCol: '#000',
     tickCol: '#FFF',
     rangesColor: [],
-    measuresColor: [],
-    valueYOffset: 0,
-    showThresholdOnBullet: false,
-    showThresholdColorOnValue: false,
-    showLowerThresholdRange: false,
-    showMiddleThresholdRange: true,
-    showUpperThresholdRange: true,
-    animateNeedleValueTransition: true,
-    animateNeedleValueTransitionSpeed: 100
+    measuresColor: []
   }
 };
 
@@ -140,7 +99,7 @@ var D3BulletPanelCtrl = function (_MetricsPanelCtrl) {
     _this.panelWidth = null;
     _this.panelHeight = null;
     _this.bulletObject = null;
-    _this.bulletsData = [{ "title": "Revenue", "subtitle": "US$, in thousands", "ranges": [150, 225, 300], "measures": [220, 270], "markers": [250] }, { "title": "Profit", "subtitle": "%", "ranges": [20, 25, 30], "measures": [21, 23], "markers": [26] }, { "title": "Order Size", "subtitle": "US$, average", "ranges": [350, 500, 600], "measures": [100, 320], "markers": [550] }, { "title": "New Customers", "subtitle": "count", "ranges": [1400, 2000, 2500], "measures": [1000, 1650], "markers": [2100] }, { "title": "Satisfaction", "subtitle": "out of 5", "ranges": [3.5, 4.25, 5], "measures": [3.2, 4.7], "markers": [4.4] }];
+    _this.bulletsData = [];
     _this.data = {
       value: 0,
       valueFormatted: 0,
@@ -248,7 +207,6 @@ var D3BulletPanelCtrl = function (_MetricsPanelCtrl) {
     key: 'renderBullet',
     value: function renderBullet() {
       // update the values to be sent to the bullet constructor
-      this.setValues(this.data);
       if ((0, _jquery2.default)('#' + this.panel.bulletDivId).length) {
         (0, _jquery2.default)('#' + this.panel.bulletDivId).remove();
       }
@@ -349,183 +307,6 @@ var D3BulletPanelCtrl = function (_MetricsPanelCtrl) {
       }
     }
   }, {
-    key: 'removeValueMap',
-    value: function removeValueMap(map) {
-      var index = _lodash2.default.indexOf(this.panel.valueMaps, map);
-      this.panel.valueMaps.splice(index, 1);
-      this.render();
-    }
-  }, {
-    key: 'addValueMap',
-    value: function addValueMap() {
-      this.panel.valueMaps.push({ value: '', op: '=', text: '' });
-    }
-  }, {
-    key: 'removeRangeMap',
-    value: function removeRangeMap(rangeMap) {
-      var index = _lodash2.default.indexOf(this.panel.rangeMaps, rangeMap);
-      this.panel.rangeMaps.splice(index, 1);
-      this.render();
-    }
-  }, {
-    key: 'addRangeMap',
-    value: function addRangeMap() {
-      this.panel.rangeMaps.push({ from: '', to: '', text: '' });
-    }
-  }, {
-    key: 'addTickMap',
-    value: function addTickMap() {
-      this.panel.tickMaps.push({ value: 0, text: '' });
-    }
-  }, {
-    key: 'removeTickMap',
-    value: function removeTickMap(tickMap) {
-      var index = _lodash2.default.indexOf(this.panel.tickMaps, tickMap);
-      this.panel.tickMaps.splice(index, 1);
-      this.render();
-    }
-
-    /**
-     * Ensure the min value is less than the max value, auto-adjust as needed
-     * @return void
-     */
-
-  }, {
-    key: 'validateLimitsMinValue',
-    value: function validateLimitsMinValue() {
-      if (this.panel.bullet.minValue >= this.panel.bullet.maxValue) {
-        // set the maxValue to be the same as the minValue+1
-        this.panel.bullet.maxValue = this.panel.bullet.minValue + 1;
-        this.alertSrvRef.set("Problem!", "Minimum Value cannot be equal to or greater than Max Value, auto-adjusting Max Value to Minimum+1 (" + this.panel.bullet.maxValue + ")", 'warning', 10000);
-      }
-      this.render();
-    }
-
-    /**
-     * Ensure the max value is greater than the min value, auto-adjust as needed
-     * @return void
-     */
-
-  }, {
-    key: 'validateLimitsMaxValue',
-    value: function validateLimitsMaxValue() {
-      if (this.panel.bullet.maxValue <= this.panel.bullet.minValue) {
-        // set the minValue to be the same as the maxValue-1
-        this.panel.bullet.minValue = this.panel.bullet.maxValue - 1;
-        this.alertSrvRef.set("Problem!", "Maximum Value cannot be equal to or less than Min Value, auto-adjusting Min Value to Maximum-1 (" + this.panel.bullet.minValue + ")", 'warning', 10000);
-      }
-      this.render();
-    }
-  }, {
-    key: 'validateTransitionValue',
-    value: function validateTransitionValue() {
-      if (this.panel.bullet.animateNeedleValueTransitionSpeed === null) {
-        this.panel.bullet.animateNeedleValueTransitionSpeed = 100;
-      }
-      if (this.panel.bullet.animateNeedleValueTransitionSpeed < 0) {
-        this.panel.bullet.animateNeedleValueTransitionSpeed = 0;
-      }
-      if (this.panel.bullet.animateNeedleValueTransitionSpeed > 60000) {
-        this.panel.bullet.animateNeedleValueTransitionSpeed = 60000;
-      }
-      this.render();
-    }
-
-    // sanity check for tick degree settings
-
-  }, {
-    key: 'validateBulletTickDegreeValues',
-    value: function validateBulletTickDegreeValues() {
-      if (this.panel.bullet.zeroTickAngle === null || this.panel.bullet.zeroTickAngle === "" || this.panel.bullet.zeroTickAngle < 0 || isNaN(this.panel.bullet.zeroTickAngle)) {
-        // alert about the error, and set it to 60
-        this.panel.bullet.zeroTickAngle = 60;
-        this.alertSrvRef.set("Problem!", "Invalid Value for Zero Tick Angle, auto-setting to default of 60", 'error', 10000);
-      }
-
-      if (this.panel.bullet.maxTickAngle === null || this.panel.bullet.maxTickAngle === "" || this.panel.bullet.maxTickAngle < 0 || isNaN(this.panel.bullet.maxTickAngle)) {
-        // alert about the error, and set it to 320
-        this.panel.bullet.maxTickAngle = 320;
-        this.alertSrvRef.set("Problem!", "Invalid Value for Max Tick Angle, auto-setting to default of 320", 'error', 10000);
-      }
-
-      var bulletTickDegrees = this.panel.bullet.maxTickAngle - this.panel.bullet.zeroTickAngle;
-      // make sure the total degrees does not exceed 360
-      if (bulletTickDegrees > 360) {
-        // set to default values and alert
-        this.panel.bullet.zeroTickAngle = 60;
-        this.panel.bullet.maxTickAngle = 320;
-        this.alertSrvRef.set("Problem!", "Bullet tick angle difference is larger than 360 degrees, auto-setting to default values", 'error', 10000);
-      }
-      // make sure it is "positive"
-      if (bulletTickDegrees < 0) {
-        // set to default values and alert
-        this.panel.bullet.zeroTickAngle = 60;
-        this.panel.bullet.maxTickAngle = 320;
-        this.alertSrvRef.set("Problem!", "Bullet tick angle difference is less than 0 degrees, auto-setting to default values", 'error', 10000);
-      }
-
-      // render
-      this.render();
-    }
-
-    // sanity check for Needle degree settings
-
-  }, {
-    key: 'validateBulletNeedleDegreeValues',
-    value: function validateBulletNeedleDegreeValues() {
-      if (this.panel.bullet.zeroNeedleAngle === null || this.panel.bullet.zeroNeedleAngle === "" || this.panel.bullet.zeroNeedleAngle < 0 || isNaN(this.panel.bullet.zeroNeedleAngle)) {
-        // alert about the error, and set it to 60
-        this.panel.bullet.zeroNeedleAngle = 60;
-        this.alertSrvRef.set("Problem!", "Invalid Value for Zero Needle Angle, auto-setting to default of 60", 'error', 10000);
-      }
-
-      if (this.panel.bullet.maxNeedleAngle === null || this.panel.bullet.maxNeedleAngle === "" || this.panel.bullet.maxNeedleAngle < 0 || isNaN(this.panel.bullet.maxNeedleAngle)) {
-        // alert about the error, and set it to 320
-        this.panel.bullet.maxNeedleAngle = 320;
-        this.alertSrvRef.set("Problem!", "Invalid Value for Max Needle Angle, auto-setting to default of 320", 'error', 10000);
-      }
-
-      var bulletNeedleDegrees = this.panel.bullet.maxNeedleAngle - this.panel.bullet.zeroNeedleAngle;
-      // make sure the total degrees does not exceed 360
-      if (bulletNeedleDegrees > 360) {
-        // set to default values and alert
-        this.panel.bullet.zeroNeedleAngle = 60;
-        this.panel.bullet.maxNeedleAngle = 320;
-        this.alertSrvRef.set("Problem!", "Bullet needle angle difference is larger than 360 degrees, auto-setting to default values", 'error', 10000);
-      }
-      // make sure it is "positive"
-      if (bulletNeedleDegrees < 0) {
-        // set to default values and alert
-        this.panel.bullet.zeroNeedleAngle = 60;
-        this.panel.bullet.maxNeedleAngle = 320;
-        this.alertSrvRef.set("Problem!", "Bullet needle angle difference is less than 0 degrees, auto-setting to default values", 'error', 10000);
-      }
-
-      // render
-      this.render();
-    }
-  }, {
-    key: 'validateRadialMetricValues',
-    value: function validateRadialMetricValues() {
-      // make sure the spacing values are valid
-      if (this.panel.bullet.tickSpaceMinVal === null || this.panel.bullet.tickSpaceMinVal === "" || isNaN(this.panel.bullet.tickSpaceMinVal)) {
-        // alert about the error, and set it to 1
-        this.panel.bullet.tickSpaceMinVal = 1;
-        this.alertSrvRef.set("Problem!", "Invalid Value for Tick Spacing Minor, auto-setting back to default of 1", 'error', 10000);
-      }
-      if (this.panel.bullet.tickSpaceMajVal === null || this.panel.bullet.tickSpaceMajVal === "" || isNaN(this.panel.bullet.tickSpaceMajVal)) {
-        // alert about the error, and set it to 10
-        this.panel.bullet.tickSpaceMajVal = 10;
-        this.alertSrvRef.set("Problem!", "Invalid Value for Tick Spacing Major, auto-setting back to default of 10", 'error', 10000);
-      }
-      if (this.panel.bullet.bulletRadius === null || this.panel.bullet.bulletRadius === "" || isNaN(this.panel.bullet.bulletRadius) || this.panel.bullet.bulletRadius < 0) {
-        // alert about the error, and set it to 0
-        this.panel.bullet.bulletRadius = 0;
-        this.alertSrvRef.set("Problem!", "Invalid Value for Bullet Radius, auto-setting back to default of 0", 'error', 10000);
-      }
-      this.render();
-    }
-  }, {
     key: 'link',
     value: function link(scope, elem, attrs, ctrl) {
       //console.log("d3bullet inside link");
@@ -585,41 +366,6 @@ var D3BulletPanelCtrl = function (_MetricsPanelCtrl) {
       return result;
     }
   }, {
-    key: 'setValues',
-    value: function setValues(data) {
-      var columns = [];
-      var bulletsData = [];
-      if (!this.series.columns) return;
-      if (this.series.columns.length > 0) {
-        for (var i = 0; i < this.series.columns.length; i++) {
-          columns.push(this.series.columns[i].text);
-        }
-        for (i = 0; i < this.series.rows.length; i++) {
-          bulletsData.push({});
-          for (var j = 0; j < columns.length; j++) {
-            if (columns[j] == "ranges" || columns[j] == "measures" || columns[j] == "markers") bulletsData[i][columns[j]] = JSON.parse(this.series.rows[i][j]);else bulletsData[i][columns[j]] = this.series.rows[i][j];
-          }
-        }
-        data.bullets = bulletsData;
-      }
-    }
-  }, {
-    key: 'getValueText',
-    value: function getValueText() {
-      return this.data.valueFormatted;
-    }
-  }, {
-    key: 'getValueRounded',
-    value: function getValueRounded() {
-      return this.data.valueRounded;
-    }
-  }, {
-    key: 'setUnitFormat',
-    value: function setUnitFormat(subItem) {
-      this.panel.format = subItem.value;
-      this.render();
-    }
-  }, {
     key: 'onDataError',
     value: function onDataError(err) {
       this.onDataReceived([]);
@@ -660,27 +406,10 @@ var D3BulletPanelCtrl = function (_MetricsPanelCtrl) {
       series.flotpairs = series.getFlotPairs(this.panel.nullPointMode);
       return series;
     }
-  }, {
-    key: 'invertColorOrder',
-    value: function invertColorOrder() {
-      var tmp = this.panel.colors[0];
-      this.panel.colors[0] = this.panel.colors[2];
-      this.panel.colors[2] = tmp;
-      this.render();
-    }
   }]);
 
   return D3BulletPanelCtrl;
 }(_sdk.MetricsPanelCtrl);
-
-function getColorForValue(data, value) {
-  for (var i = data.thresholds.length; i > 0; i--) {
-    if (value >= data.thresholds[i - 1]) {
-      return data.colorMap[i];
-    }
-  }
-  return _lodash2.default.first(data.colorMap);
-}
 
 D3BulletPanelCtrl.templateUrl = 'partials/template.html';
 exports.D3BulletPanelCtrl = D3BulletPanelCtrl;

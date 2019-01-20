@@ -1,8 +1,8 @@
 {
-  "name": "d3-bullet-panel",
+  "name": "sp-d3-bullet-chart",
   "private": true,
   "version": "0.0.6",
-  "description": "Grafana D3 Bullet Panel",
+  "description": "SP D3 Bullet Panel",
   "main": "module.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,9 +1,9 @@
 {
     "type": "panel",
-    "name": "D3 Bullet",
-    "id": "d3-bullet-panel",
+    "name": "SP D3 Bullet",
+    "id": "sp-d3-bullet",
     "info": {
-        "description": "D3-based Bullet panel for Grafana",
+        "description": "D3-based Bullet panel",
         "author": {
             "name": "Segmentproxy",
             "url": "https://github.com/segmentproxy"
@@ -15,10 +15,10 @@
         },
         "links": [{
             "name": "Project site",
-            "url": "https://github.com/segmentproxy/d3-bullet-charts"
+            "url": "https://github.com/segmentproxy/sp-d3-bullet-chart"
         }, {
             "name": "MIT License",
-            "url": "https://github.com/segmentproxy/d3-bullet-charts/blob/master/LICENSE"
+            "url": "https://github.com/segmentproxy/sp-d3-bullet-chart/blob/master/LICENSE"
         }],
         "version": "0.0.6",
         "updated": "2019-01-19"
