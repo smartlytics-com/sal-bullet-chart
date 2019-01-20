@@ -1,0 +1,46 @@
+.label{
+	font-size:22.5px;
+	fill:#ffffff;
+	text-anchor:middle;
+	alignment-baseline:middle;
+}
+.face{
+	stroke:#c8c8c8;
+	stroke-width:2;
+}
+.minorTicks{
+	stroke-width:2;
+	stroke:white;
+}
+.majorTicks{
+	stroke:white;
+	stroke-width:3;
+}
+.green text{
+	font-size:12px;
+}
+.green .majorTicks{
+	stroke-width:1;
+}
+.green .minorTicks{
+	stroke-width:.5;
+}
+.red .label{
+	fill:rgb(26,12,37);
+}
+.red .majorTicks,.red .minorTicks{
+	stroke:rgb(26,12,37);
+}
+.blue line{
+	stroke-width:6;
+	stroke-linecap:round;
+}
+.bullet { font: 10px sans-serif; }
+.bullet .tick line { stroke: #666; stroke-width: .5px; }
+/*.bullet .range.s0 { fill: #eee; }
+.bullet .range.s1 { fill: #ddd; }
+.bullet .range.s2 { fill: #ccc; }
+.bullet .measure.s0 { fill: lightsteelblue; }
+.bullet .measure.s1 { fill: steelblue; }*/
+/*.bullet .title { fill:#000; }
+.bullet .subtitle { fill: #999; }*/
