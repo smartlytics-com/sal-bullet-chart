@@ -2,7 +2,6 @@ import {MetricsPanelCtrl} from 'app/plugins/sdk';
 import _ from 'lodash';
 import $ from 'jquery';
 import TimeSeries from 'app/core/time_series2';
-
 import * as d3 from './external/d3.v3.min';
 import './css/panel.css!';
 import './external/d3bullet';
@@ -81,6 +80,12 @@ class D3BulletPanelCtrl extends MetricsPanelCtrl {
     //add the relative path to the partial
     var optionsPath = thisPanelPath + 'partials/editor.options.html';
     this.addEditorTab('Options', optionsPath, 2);
+    // var radialMetricsPath = thisPanelPath + 'partials/editor.radialmetrics.html';
+    // this.addEditorTab('Radial Metrics', radialMetricsPath, 3);
+    // var thresholdingPath = thisPanelPath + 'partials/editor.thresholding.html';
+    // this.addEditorTab('Thresholding', thresholdingPath, 4);
+    // var mappingsPath = thisPanelPath + 'partials/editor.mappings.html';
+    // this.addEditorTab('Value Mappings', mappingsPath, 5);
   }
 
   /**
@@ -155,8 +160,6 @@ class D3BulletPanelCtrl extends MetricsPanelCtrl {
     $('.bullet').remove();
     this.panelWidth = this.getPanelWidthBySpan();
     this.panelHeight = this.getPanelHeight();
-    console.log(this.panelWidth);
-    console.log(this.panelHeight);
     var data = this.bulletsData;
     var margin = {top: 10, right: 40, bottom: 40, left: 120};
     var width = this.panelWidth - margin.left - margin.right;
