@@ -1,15 +1,15 @@
 {
-  "name": "d3-bullet-panel",
+  "name": "sp-d3-bullet",
   "description": "D3-bullet panel for Grafana",
   "main": "",
   "authors": [
-    "Brian Gann <bkgann@gmail.com>"
+    "Segmentproxy"
   ],
   "license": "MIT",
   "keywords": [
     "grafana3 d3 d3js"
   ],
-  "homepage": "https://github.com/briangann/grafana-gauge-panel",
+  "homepage": "https://github.com/segmentproxy/d3-bullet-charts.git",
   "private": true,
   "ignore": [
     "**/.*",

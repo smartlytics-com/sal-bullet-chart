@@ -1,10 +1,8 @@
 import {MetricsPanelCtrl} from 'app/plugins/sdk';
 import _ from 'lodash';
 import $ from 'jquery';
-import kbn from 'app/core/utils/kbn';
-import config from 'app/core/config';
 import TimeSeries from 'app/core/time_series2';
-//import * as d3 from '../bower_components/d3/d3.js';
+
 import * as d3 from './external/d3.v3.min';
 import './css/panel.css!';
 import './external/d3bullet';
@@ -83,12 +81,6 @@ class D3BulletPanelCtrl extends MetricsPanelCtrl {
     //add the relative path to the partial
     var optionsPath = thisPanelPath + 'partials/editor.options.html';
     this.addEditorTab('Options', optionsPath, 2);
-    // var radialMetricsPath = thisPanelPath + 'partials/editor.radialmetrics.html';
-    // this.addEditorTab('Radial Metrics', radialMetricsPath, 3);
-    // var thresholdingPath = thisPanelPath + 'partials/editor.thresholding.html';
-    // this.addEditorTab('Thresholding', thresholdingPath, 4);
-    // var mappingsPath = thisPanelPath + 'partials/editor.mappings.html';
-    // this.addEditorTab('Value Mappings', mappingsPath, 5);
   }
 
   /**

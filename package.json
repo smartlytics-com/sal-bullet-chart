@@ -1,5 +1,5 @@
 {
-  "name": "sp-d3-bullet-chart",
+  "name": "Segmentproxy",
   "private": true,
   "version": "0.0.6",
   "description": "SP D3 Bullet Panel",
@@ -11,7 +11,6 @@
     "type": "git",
     "url": "git+https://github.com/segmentproxy/d3-bullet-charts.git"
   },
-  "name": "Segmentproxy",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/segmentproxy/d3-bullet-charts/issues"
