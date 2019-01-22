@@ -38,6 +38,9 @@ const panelDefaults = {
     tickCol: '#FFF',
     rangesColor: [],
     measuresColor : [],
+    ranges:"50,100,150",
+    measures:"125,140",
+    markers:"130"
   },
 };
 
@@ -164,6 +167,7 @@ class D3BulletPanelCtrl extends MetricsPanelCtrl {
     var margin = {top: 10, right: 40, bottom: 40, left: 120};
     var width = this.panelWidth - margin.left - margin.right;
     var height = this.panelHeight/data.length - margin.top - margin.bottom;
+    height = height > 5 ? height:5;
     // set the width and height to be double the radius
 
     if(this.panel.bullet.rangesColor.length === 0){
@@ -322,6 +326,62 @@ class D3BulletPanelCtrl extends MetricsPanelCtrl {
   onDataError(err) {
     this.onDataReceived([]);
   }
+
+  parseTableQueryData(dataList){
+    var columns = {};
+    var bulletsData = [];
+    for(var i = 0; i < dataList[0].columns.length; i++){
+      columns[dataList[0].columns[i].text] = i;
+    }
+    for(i = 0; i < dataList.length; i++){
+      for(var j = 0; j < dataList[i].rows.length; j++){
+        var title = "";
+        var subtitle = "";
+        var ranges = [];
+        var markers = [];
+        var measures = [];
+        if(columns.hasOwnProperty("title")){
+          title = dataList[i].rows[j][columns.title];
+        }
+        else{
+          title = "Title" + i;
+        }
+        if(columns.hasOwnProperty("subtitle")){
+          subtitle = dataList[i].rows[j][columns.subtitle];
+        }
+        else{
+          subtitle = "Subtitle" + i;
+        }
+        if(columns.hasOwnProperty("ranges")){
+          ranges = dataList[i].rows[j][columns.ranges].toString().match(/\d+/g).map(Number);
+        }
+        else{
+          ranges = this.panel.bullet.ranges.toString().match(/\d+/g).map(Number);
+        }
+        if(columns.hasOwnProperty("measures")){
+          measures = dataList[i].rows[j][columns.measures].toString().match(/\d+/g).map(Number);
+        }
+        else{
+          measures = this.panel.bullet.measures.toString().match(/\d+/g).map(Number);
+        }
+        if(columns.hasOwnProperty("markers")){
+          markers = dataList[i].rows[j][columns.markers].toString().match(/\d+/g).map(Number);
+        }
+        else{
+          markers = this.panel.bullet.markers.toString().match(/\d+/g).map(Number);
+        }
+        bulletsData.push({
+          title: title,
+          subtitle: subtitle,
+          ranges: ranges,
+          measures: measures,
+          markers: markers
+        });
+      }
+    }
+    return bulletsData;
+  }
+
   parseSeries(series) {
     return _.map(this.series, (serie, i) => {
       return {
@@ -334,9 +394,16 @@ class D3BulletPanelCtrl extends MetricsPanelCtrl {
     });
   }
   onDataReceived(dataList) {
-    this.series = dataList.map(this.seriesHandler.bind(this));
     var data = {};
-    this.bulletsData = this.parseSeries(this.series);
+    if(dataList.length > 0){
+      if(dataList[0].hasOwnProperty("datapoints")){
+        this.series = dataList.map(this.seriesHandler.bind(this));
+        this.bulletsData = this.parseSeries(this.series);
+      }
+      else if(dataList[0].hasOwnProperty("type")){
+        this.bulletsData = this.parseTableQueryData(dataList);
+      }
+    }
     if(this.bulletObject !== null){
       this.bulletObject.updateBullet(data.value, data.valueFormatted, data.valueRounded);
     } else {
