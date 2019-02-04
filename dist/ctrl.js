@@ -17,14 +17,6 @@ var _jquery = require('jquery');
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _kbn = require('app/core/utils/kbn');
-
-var _kbn2 = _interopRequireDefault(_kbn);
-
-var _config = require('app/core/config');
-
-var _config2 = _interopRequireDefault(_config);
-
 var _time_series = require('app/core/time_series2');
 
 var _time_series2 = _interopRequireDefault(_time_series);
@@ -46,8 +38,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-//import * as d3 from '../bower_components/d3/d3.js';
-
 
 var panelDefaults = {
   fontSizes: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70],
@@ -74,7 +64,10 @@ var panelDefaults = {
     markerCol: '#000',
     tickCol: '#FFF',
     rangesColor: [],
-    measuresColor: []
+    measuresColor: [],
+    ranges: "50,100,150",
+    measures: "125,140",
+    markers: "130"
   }
 };
 
@@ -213,12 +206,11 @@ var D3BulletPanelCtrl = function (_MetricsPanelCtrl) {
       (0, _jquery2.default)('.bullet').remove();
       this.panelWidth = this.getPanelWidthBySpan();
       this.panelHeight = this.getPanelHeight();
-      console.log(this.panelWidth);
-      console.log(this.panelHeight);
       var data = this.bulletsData;
       var margin = { top: 10, right: 40, bottom: 40, left: 120 };
       var width = this.panelWidth - margin.left - margin.right;
       var height = this.panelHeight / data.length - margin.top - margin.bottom;
+      height = height > 5 ? height : 5;
       // set the width and height to be double the radius
 
       if (this.panel.bullet.rangesColor.length === 0) {
@@ -371,6 +363,57 @@ var D3BulletPanelCtrl = function (_MetricsPanelCtrl) {
       this.onDataReceived([]);
     }
   }, {
+    key: 'parseTableQueryData',
+    value: function parseTableQueryData(dataList) {
+      var columns = {};
+      var bulletsData = [];
+      for (var i = 0; i < dataList[0].columns.length; i++) {
+        columns[dataList[0].columns[i].text] = i;
+      }
+      for (i = 0; i < dataList.length; i++) {
+        for (var j = 0; j < dataList[i].rows.length; j++) {
+          var title = "";
+          var subtitle = "";
+          var ranges = [];
+          var markers = [];
+          var measures = [];
+          if (columns.hasOwnProperty("title")) {
+            title = dataList[i].rows[j][columns.title];
+          } else {
+            title = "Title" + i;
+          }
+          if (columns.hasOwnProperty("subtitle")) {
+            subtitle = dataList[i].rows[j][columns.subtitle];
+          } else {
+            subtitle = "Subtitle" + i;
+          }
+          if (columns.hasOwnProperty("ranges")) {
+            ranges = dataList[i].rows[j][columns.ranges].toString().match(/\d+/g).map(Number);
+          } else {
+            ranges = this.panel.bullet.ranges.toString().match(/\d+/g).map(Number);
+          }
+          if (columns.hasOwnProperty("measures")) {
+            measures = dataList[i].rows[j][columns.measures].toString().match(/\d+/g).map(Number);
+          } else {
+            measures = this.panel.bullet.measures.toString().match(/\d+/g).map(Number);
+          }
+          if (columns.hasOwnProperty("markers")) {
+            markers = dataList[i].rows[j][columns.markers].toString().match(/\d+/g).map(Number);
+          } else {
+            markers = this.panel.bullet.markers.toString().match(/\d+/g).map(Number);
+          }
+          bulletsData.push({
+            title: title,
+            subtitle: subtitle,
+            ranges: ranges,
+            measures: measures,
+            markers: markers
+          });
+        }
+      }
+      return bulletsData;
+    }
+  }, {
     key: 'parseSeries',
     value: function parseSeries(series) {
       return _lodash2.default.map(this.series, function (serie, i) {
@@ -386,9 +429,15 @@ var D3BulletPanelCtrl = function (_MetricsPanelCtrl) {
   }, {
     key: 'onDataReceived',
     value: function onDataReceived(dataList) {
-      this.series = dataList.map(this.seriesHandler.bind(this));
       var data = {};
-      this.bulletsData = this.parseSeries(this.series);
+      if (dataList.length > 0) {
+        if (dataList[0].hasOwnProperty("datapoints")) {
+          this.series = dataList.map(this.seriesHandler.bind(this));
+          this.bulletsData = this.parseSeries(this.series);
+        } else if (dataList[0].hasOwnProperty("type")) {
+          this.bulletsData = this.parseTableQueryData(dataList);
+        }
+      }
       if (this.bulletObject !== null) {
         this.bulletObject.updateBullet(data.value, data.valueFormatted, data.valueRounded);
       } else {

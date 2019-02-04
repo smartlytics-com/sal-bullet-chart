@@ -216,7 +216,6 @@ d3.bullet = function() {
   bullet.options = function(x) {
     if (!arguments.length) return options;
     options = x;
-    console.log(options);
     return bullet;
   };
   return bullet;
