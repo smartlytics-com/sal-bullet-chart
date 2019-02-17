@@ -1,12 +1,12 @@
 {
     "type": "panel",
-    "name": "SP D3 Bullet",
-    "id": "sp-d3-bullet",
+    "name": "SAL D3 Bullet",
+    "id": "sal-d3-bullet",
     "info": {
         "description": "D3-based Bullet panel",
         "author": {
-            "name": "Segmentproxy",
-            "url": "https://github.com/segmentproxy"
+            "name": "Smartlytics",
+            "url": "https://github.com/smartlytics-com"
         },
         "keywords": ["bullet", "panel"],
         "logos": {
@@ -15,10 +15,10 @@
         },
         "links": [{
             "name": "Project site",
-            "url": "https://github.com/segmentproxy/sp-d3-bullet-chart"
+            "url": "https://github.com/smartlytics-com/sal-d3-bullet-chart"
         }, {
             "name": "MIT License",
-            "url": "https://github.com/segmentproxy/sp-d3-bullet-chart/blob/master/LICENSE"
+            "url": "https://github.com/smartlytics-com/sal-d3-bullet-chart/blob/master/LICENSE"
         }],
         "version": "0.0.6",
         "updated": "2019-01-19"

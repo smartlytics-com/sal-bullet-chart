@@ -1,5 +1,5 @@
 {
-  "name": "Segmentproxy",
+  "name": "sp-d3-bullet-chart",
   "private": true,
   "version": "0.0.6",
   "description": "SP D3 Bullet Panel",
@@ -10,11 +10,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/segmentproxy/d3-bullet-charts.git"
+    "url": "git+https://github.com/smartlytics-com/d3-bullet-charts.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/segmentproxy/d3-bullet-charts/issues"
+    "url": "https://github.com/smartlytics-com/d3-bullet-charts/issues"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -40,5 +40,5 @@
     "lodash": "^4.17.5"
   },
   "dependencies": {},
-  "homepage": "https://github.com/segmentproxy/d3-bullet-charts"
+  "homepage": "https://github.com/smartlytics-com/d3-bullet-charts"
 }
